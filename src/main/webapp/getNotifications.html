@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            padding-top: 56px;
+            background: url('kk.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .footer {
+            padding: 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+        .about-us {
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .about-us h2 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <a class="navbar-brand" href="#">Task Management System</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="register.html">Sign Up</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="login.html">Log In</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Notifications <span id="notificationCount" class="badge badge-danger"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="notificationsDropdown">
+                        <!-- Notifications will be added here by JavaScript -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="text-center">Welcome to the Task Management System</h1>
+        <p class="text-center">Manage tasks assigned by lecturers based on departments.</p>
+
+        <div class="about-us mt-4">
+            <h2>About Us</h2>
+            <p>This Task Management System (TMA) is designed to streamline task assignments between lecturers and students. It provides an efficient way to manage and track tasks, improving productivity and communication within educational institutions.</p>
+            <p>Our mission is to enhance the academic experience by simplifying task management and ensuring that students can easily access and manage their assignments.</p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Task Management System</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function fetchNotifications() {
+            $.ajax({
+                url: '/getNotifications',
+                method: 'GET',
+                success: function(data) {
+                    var notifications = JSON.parse(data);
+                    var dropdownMenu = document.querySelector('#notificationsDropdown + .dropdown-menu');
+                    dropdownMenu.innerHTML = '';
+                    notifications.forEach(function(notification) {
+                        var item = document.createElement('a');
+                        item.className = 'dropdown-item';
+                        item.href = '#';
+                        item.textContent = notification;
+                        dropdownMenu.appendChild(item);
+                    });
+
+                    var notificationCount = document.getElementById('notificationCount');
+                    notificationCount.textContent = notifications.length > 0 ? notifications.length : '';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchNotifications();
+            setInterval(fetchNotifications, 60000); // Poll every 60 seconds
+        });
+    </script>
+</body>
+</html>
